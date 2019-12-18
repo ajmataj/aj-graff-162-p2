@@ -3,12 +3,14 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import People from './components/People';
 import Planets from './components/Planets';
+import Starships from './components/Starships';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Container, Dimmer, Loader } from "semantic-ui-react";
 
 function App() {
   const [people, setPeople] = useState([]);
   const [planets, setPlanets] = useState([]);
+  const [starships, setStarships] = useState([]);
   // Loading set to true until data is present
   const [loading, setLoading] = useState(true);
 
@@ -27,8 +29,16 @@ function App() {
       setLoading(false);
     }
 
+    async function fetchStarships() {
+      let res = await fetch("https://swapi.co/api/starships/?format=json");
+      let data = await res.json();
+      setStarships(data.results);
+      setLoading(false);
+    }
+
     fetchPeople();
     fetchPlanets();
+    fetchStarships();
   }, []);
 
   return (
@@ -46,10 +56,13 @@ function App() {
                 <Home />
               </Route>
               <Route exact path="/people">
-                <People data={people}/>
+                <People data={people} />
               </Route>
               <Route exact path="/planets">
-                <Planets data={planets}/>
+                <Planets data={planets} />
+              </Route>
+              <Route exact path="/starships">
+                <Starships data={starships} />
               </Route>
             </Switch>
           )}
